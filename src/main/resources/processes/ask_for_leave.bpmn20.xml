@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:flowable="http://flowable.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.flowable.org/processdef" exporter="Flowable Open Source Modeler" exporterVersion="6.7.2">
+  <process id="leave" name="请假流程" isExecutable="true">
+    <documentation>请假审批流程</documentation>
+    <startEvent id="startEvent1" name="开始
+" flowable:formFieldValidation="true"></startEvent>
+    <userTask id="apply" name="请假申请" flowable:assignee="${employee}" flowable:formFieldValidation="true">
+      <extensionElements>
+        <modeler:initiator-can-complete xmlns:modeler="http://flowable.org/modeler"><![CDATA[false]]></modeler:initiator-can-complete>
+      </extensionElements>
+    </userTask>
+    <userTask id="leader" name="领导审批
+" flowable:candidateGroups="a" flowable:formFieldValidation="true"></userTask>
+    <exclusiveGateway id="judgeTask" name="判断是否大于两天"></exclusiveGateway>
+    <endEvent id="sid-CE8AF9DD-5ED0-4DB7-8990-0F3E7E83B2EC" name="结束
+"></endEvent>
+    <userTask id="sid-A0EF0BAD-E445-4D6D-B741-2185DDB69D98" name="老板审批
+" flowable:candidateGroups="b" flowable:formFieldValidation="true"></userTask>
+    <sequenceFlow id="sid-C573C5C5-8027-42DF-98BC-209CFED8AF77" name="流程开始
+" sourceRef="startEvent1" targetRef="apply"></sequenceFlow>
+    <sequenceFlow id="sid-8EA5D70B-3774-4FF1-86C2-405DB1FE0EE5" sourceRef="apply" targetRef="leader"></sequenceFlow>
+    <sequenceFlow id="judgeLess" name="小于等于2天
+" sourceRef="judgeTask" targetRef="sid-CE8AF9DD-5ED0-4DB7-8990-0F3E7E83B2EC">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${day<=2}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="judgeMore" name="大于2天
+" sourceRef="judgeTask" targetRef="sid-A0EF0BAD-E445-4D6D-B741-2185DDB69D98">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${day>=2}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="leaderPassFlow" name="通过" sourceRef="leader" targetRef="judgeTask">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${outcome=='通过'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="bossPassFlow" name="通过
+" sourceRef="sid-A0EF0BAD-E445-4D6D-B741-2185DDB69D98" targetRef="sid-CE8AF9DD-5ED0-4DB7-8990-0F3E7E83B2EC">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${outcome=='通过'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="bossRejectFlow" name="驳回
+" sourceRef="sid-A0EF0BAD-E445-4D6D-B741-2185DDB69D98" targetRef="apply">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${outcome=='驳回'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="leaderRejectFlow" name="驳回
+" sourceRef="leader" targetRef="apply">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${outcome=='驳回'}]]></conditionExpression>
+    </sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_leave">
+    <bpmndi:BPMNPlane bpmnElement="leave" id="BPMNPlane_leave">
+      <bpmndi:BPMNShape bpmnElement="startEvent1" id="BPMNShape_startEvent1">
+        <omgdc:Bounds height="30.0" width="30.0" x="74.99999776482586" y="159.99999560415753"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="apply" id="BPMNShape_apply">
+        <omgdc:Bounds height="80.0" width="100.0" x="224.9999966472388" y="134.99999597668656"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="leader" id="BPMNShape_leader">
+        <omgdc:Bounds height="80.0" width="99.99999999999989" x="434.999993517995" y="134.99999798834327"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="judgeTask" id="BPMNShape_judgeTask">
+        <omgdc:Bounds height="40.0" width="40.0" x="614.9999725073584" y="154.99999329447766"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="sid-CE8AF9DD-5ED0-4DB7-8990-0F3E7E83B2EC" id="BPMNShape_sid-CE8AF9DD-5ED0-4DB7-8990-0F3E7E83B2EC">
+        <omgdc:Bounds height="28.0" width="28.0" x="854.9999617785227" y="160.99999558925637"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="sid-A0EF0BAD-E445-4D6D-B741-2185DDB69D98" id="BPMNShape_sid-A0EF0BAD-E445-4D6D-B741-2185DDB69D98">
+        <omgdc:Bounds height="80.0" width="100.0" x="584.9999729543932" y="419.9999937415124"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="leaderPassFlow" id="BPMNEdge_leaderPassFlow" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="20.0" flowable:targetDockerY="20.0">
+        <omgdi:waypoint x="534.9499930954473" y="174.99999642372117"></omgdi:waypoint>
+        <omgdi:waypoint x="614.9999731332072" y="174.99999391876182"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-C573C5C5-8027-42DF-98BC-209CFED8AF77" id="BPMNEdge_sid-C573C5C5-8027-42DF-98BC-209CFED8AF77" flowable:sourceDockerX="15.0" flowable:sourceDockerY="15.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="104.94999118952744" y="174.9999956342619"></omgdi:waypoint>
+        <omgdi:waypoint x="224.99999664721827" y="174.99999587600306"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="judgeLess" id="BPMNEdge_judgeLess" flowable:sourceDockerX="20.5" flowable:sourceDockerY="20.5" flowable:targetDockerX="14.0" flowable:targetDockerY="14.0">
+        <omgdi:waypoint x="654.4865553337096" y="175.45922094794076"></omgdi:waypoint>
+        <omgdi:waypoint x="854.9999891600944" y="175.02986705700886"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="bossRejectFlow" id="BPMNEdge_bossRejectFlow" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="50.0" flowable:targetDockerY="79.0">
+        <omgdi:waypoint x="584.9999729543931" y="425.8333251366599"></omgdi:waypoint>
+        <omgdi:waypoint x="276.367154531445" y="214.94999597668658"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-8EA5D70B-3774-4FF1-86C2-405DB1FE0EE5" id="BPMNEdge_sid-8EA5D70B-3774-4FF1-86C2-405DB1FE0EE5" flowable:sourceDockerX="99.0" flowable:sourceDockerY="60.0" flowable:targetDockerX="1.0" flowable:targetDockerY="60.0">
+        <omgdi:waypoint x="324.9499966472388" y="194.99999599374974"></omgdi:waypoint>
+        <omgdi:waypoint x="434.99999351795395" y="194.99999797038205"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="bossPassFlow" id="BPMNEdge_bossPassFlow" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="14.0" flowable:targetDockerY="14.0">
+        <omgdi:waypoint x="667.801024232049" y="419.9999937415124"></omgdi:waypoint>
+        <omgdi:waypoint x="860.1157818219276" y="185.78182706693713"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="judgeMore" id="BPMNEdge_judgeMore" flowable:sourceDockerX="20.5" flowable:sourceDockerY="20.5" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="635.4665218331456" y="194.48000910405827"></omgdi:waypoint>
+        <omgdi:waypoint x="635.0701837878188" y="419.9999937415124"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="leaderRejectFlow" id="BPMNEdge_leaderRejectFlow" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="434.999993517844" y="174.9999975093774"></omgdi:waypoint>
+        <omgdi:waypoint x="324.94999664722263" y="174.9999964551735"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>
